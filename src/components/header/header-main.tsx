@@ -1,4 +1,5 @@
-import { useSession, signOut } from "next-auth/react"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { useSession } from "next-auth/react"
 import DesktopMenu from "@/components/header/header-desktop"
 import MobileMenu from "@/components/header/header-mobile"
 import ThemeChanger from "@/components/theme-changer"
@@ -8,7 +9,7 @@ import React from "react"
 export default function HeaderMain() {
 
   const [show, setShow] = React.useState<boolean>(false)
-  const { data: user, status } = useSession()
+  const { data } = useSession()
 
   return (
     <header className="sticky top-0 left-0 w-full border-b">
@@ -19,7 +20,7 @@ export default function HeaderMain() {
             <h1 className="text-2xl font-semibold">PPS</h1>
           </div>
           {/* desktop menu goes here */}
-          <DesktopMenu isLogin={status == "authenticated" ? true : false} />
+          <DesktopMenu />
         </div>
         {/* hamburger icon goes here */}
         <div className="md:hidden flex items-center gap-3">
@@ -28,8 +29,15 @@ export default function HeaderMain() {
         </div>
         <div className="hidden md:flex items-center gap-3">
           <ThemeChanger />
-          {status == "authenticated" && (
-            <Icons.logout className="text-destructive" onClick={() => signOut()} />
+          {data?.user && (
+            <Avatar>
+              <AvatarFallback>
+                {data.user.name?.split(" ").length! > 1
+                  ? data.user.name?.split(" ")[0]?.[0] + data.user.name?.split(" ")[1]?.[0]!
+                  : data.user.name?.split(" ")[0]?.[0]
+                }
+              </AvatarFallback>
+            </Avatar>
           )}
         </div>
       </div>

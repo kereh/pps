@@ -1,5 +1,17 @@
-import { Transition } from "@headlessui/react"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import { Separator } from "@/components/ui/separator"
+import { signOut, useSession } from "next-auth/react"
+import { Transition } from "@headlessui/react"
 import Icons from "@/components/icons"
 import Link from "next/link"
 import React from "react"
@@ -10,6 +22,9 @@ interface Props {
 }
 
 export default function MobileMenu({ isShowing, setShowing }: Props) {
+
+  const { status } = useSession()
+
   return (
     <Transition
       show={isShowing}
@@ -32,24 +47,42 @@ export default function MobileMenu({ isShowing, setShowing }: Props) {
           <p className="text-muted-foreground italic">Permintaan Pembuatan Surat</p>
           <Separator className="mt-3 mb-8" />
           <div className="flex flex-col gap-8">
-            <Link href="/">
+            <Link href="/" onClick={() => setShowing(!isShowing)}>
               <div className="flex flex-items gap-2">
                 <Icons.home className="w-5 h-5" />
                 <span>Beranda</span>
               </div>
             </Link>
-            <Link href="/">
+            <Link href="/" onClick={() => setShowing(!isShowing)}>
               <div className="flex flex-items gap-2">
                 <Icons.mail className="w-5 h-5" />
                 <span>Buat Surat</span>
               </div>
             </Link>
-            <Link href="/masuk">
-              <div className="flex flex-items gap-2">
-                <Icons.login className="w-5 h-5" />
-                <span>Masuk</span>
-              </div>
-            </Link>
+            {status == "unauthenticated" ? (
+              <Link href="/masuk" onClick={() => setShowing(!isShowing)}>
+                <div className="flex flex-items gap-2">
+                  <Icons.login className="w-5 h-5" />
+                  <span>Masuk</span>
+                </div>
+              </Link>
+            ) : (
+              <AlertDialog>
+                <AlertDialogTrigger className="text-destructive">Log Out</AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Log Out dari akun?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Apakah anda yakin ingin log out dari akun? Pilih YA untuk Log Out
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Tidak</AlertDialogCancel>
+                    <AlertDialogAction onClick={() => signOut()}>YA</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            )}
           </div>
         </div>
       </div>

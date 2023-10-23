@@ -6,8 +6,8 @@ import {
   type NextAuthOptions,
   type Session,
 } from "next-auth"
+import { type JWT } from "next-auth/jwt"
 import Credentials from "next-auth/providers/credentials"
-
 import { env } from "@/env.mjs"
 import { db } from "@/server/db"
 
@@ -19,13 +19,18 @@ import { db } from "@/server/db"
  */
 declare module "next-auth" {
   interface Session extends DefaultSession {
-    user: DefaultSession["user"] & {
+    user: {
       id: string
       role: string
-    }
+    } & DefaultSession["user"]
   }
-
   interface User {
+    role: string
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
     role: string
   }
 }
@@ -67,14 +72,16 @@ export const authOptions: NextAuthOptions = {
     async jwt({ user, token }) {
       if (user) {
         token.id = user.id
+        token.role = user.role
       }
       return token
     },
-    async session({ user, session }) {
+    async session({ user, session, token }) {
       const sess: Session = {
         ...session,
         user: {
           ...session.user,
+          role: token.role,
         }
       }
       return sess

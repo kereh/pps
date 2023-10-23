@@ -4,7 +4,7 @@ export default function HeroMain() {
   return (
     <div className="grid place-content-center h-screen md:h-[75vh] 2xl:h-[87vh] w-full">
       <div className="w-full md:max-w-sm">
-        <div className="flex flex-col space-y-3">
+        <div className="flex flex-col md:text-center md:items-center space-y-3">
           <h1 className="text-2xl text-primary font-semibold">Permintaan
             <span className="block">Pembuatan Surat</span>
           </h1>

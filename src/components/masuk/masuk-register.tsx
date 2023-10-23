@@ -12,20 +12,6 @@ import { z } from "zod"
 export default function MasukRegister() {
 
   const { toast } = useToast()
-  const mutation = api.autentikasi.registrasi.useMutation({
-    onSuccess: (data) => {
-      toast({
-        title: "Submited Data",
-        description: JSON.stringify(data)
-      })
-    },
-    onError(error, variables, context) {
-      toast({
-        title: "Terjadi Kesalahan",
-        description: JSON.stringify(error.data?.code)
-      })
-    },
-  })
 
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
@@ -34,6 +20,26 @@ export default function MasukRegister() {
       password: "",
       name: ""
     }
+  })
+
+  const mutation = api.autentikasi.registrasi.useMutation({
+    onSuccess: (data) => {
+      toast({
+        title: "Registrasi berhasil!",
+        description: (
+          <pre className="p-4">
+            <code>{JSON.stringify(data, null, 2)}</code>
+          </pre>
+        )
+      })
+      form.reset()
+    },
+    onError(error, variables, context) {
+      toast({
+        title: "Terjadi Kesalahan",
+        description: JSON.stringify(error.data?.code)
+      })
+    },
   })
 
   function onSubmit(val: z.infer<typeof registerSchema>) {
