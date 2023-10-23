@@ -5,7 +5,8 @@ import {
   MailIcon,
   LogInIcon,
   MenuIcon,
-  XOctagonIcon
+  XOctagonIcon,
+  LogOutIcon
 } from "lucide-react"
 
 export const Icons = {
@@ -15,7 +16,8 @@ export const Icons = {
   mail: MailIcon,
   login: LogInIcon,
   menu: MenuIcon,
-  close: XOctagonIcon
+  close: XOctagonIcon,
+  logout: LogOutIcon
 }
 
 export default Icons

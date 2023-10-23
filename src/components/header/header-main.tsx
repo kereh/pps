@@ -1,3 +1,4 @@
+import { useSession, signOut } from "next-auth/react"
 import DesktopMenu from "@/components/header/header-desktop"
 import MobileMenu from "@/components/header/header-mobile"
 import ThemeChanger from "@/components/theme-changer"
@@ -7,6 +8,7 @@ import React from "react"
 export default function HeaderMain() {
 
   const [show, setShow] = React.useState<boolean>(false)
+  const { data: user, status } = useSession()
 
   return (
     <header className="sticky top-0 left-0 w-full border-b">
@@ -17,15 +19,18 @@ export default function HeaderMain() {
             <h1 className="text-2xl font-semibold">PPS</h1>
           </div>
           {/* desktop menu goes here */}
-          <DesktopMenu />
+          <DesktopMenu isLogin={status == "authenticated" ? true : false} />
         </div>
         {/* hamburger icon goes here */}
         <div className="md:hidden flex items-center gap-3">
           <ThemeChanger />
           <Icons.menu onClick={() => setShow(!show)} />
         </div>
-        <div className="hidden md:block">
+        <div className="hidden md:flex items-center gap-3">
           <ThemeChanger />
+          {status == "authenticated" && (
+            <Icons.logout className="text-destructive" onClick={() => signOut()} />
+          )}
         </div>
       </div>
       <MobileMenu

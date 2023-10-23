@@ -7,11 +7,13 @@ import { loginSchema } from "@/schemas/login"
 import { useToast } from "../ui/use-toast"
 import { useForm } from "react-hook-form"
 import { signIn } from "next-auth/react"
+import { useRouter } from "next/router"
 import { z } from "zod"
 
 export default function MasukLogin() {
 
   const { toast } = useToast()
+  const { push } = useRouter()
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -27,12 +29,14 @@ export default function MasukLogin() {
       password: val.password,
       redirect: false
     }).then((val) => {
-      if (!val?.error) {
-        toast({
-          title: "Login OK",
-          description: "Login berhasil"
+      if (val?.error) {
+        return toast({
+          title: "Login Gagal",
+          description: "Periksa kembali username atau password yang anda masukan",
+          variant: "destructive"
         })
       }
+      push("/")
     })
   }
 
@@ -67,7 +71,7 @@ export default function MasukLogin() {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="johndoe123" {...field} />
+                    <Input placeholder="****" type="password" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
