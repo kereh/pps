@@ -4,8 +4,8 @@ import MasukRegister from "@/components/masuk/masuk-register"
 
 export default function MasukMain() {
   return (
-    <div className="flex justify-center items-center w-full h-screen h-screen md:h-[80vh]">
-      <Tabs defaultValue="account" className="w-[400px]">
+    <div className="flex justify-center items-center w-full h-screen md:h-[80vh]">
+      <Tabs defaultValue="login" className="w-[400px]">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="login">Login</TabsTrigger>
           <TabsTrigger value="register">Registrasi</TabsTrigger>

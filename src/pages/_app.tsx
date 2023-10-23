@@ -2,6 +2,7 @@ import { SessionProvider } from "next-auth/react"
 import { type Session } from "next-auth"
 import { type AppType } from "next/app"
 import { api } from "@/utils/api"
+import { Toaster } from "@/components/ui/toaster"
 // components
 import ThemeProvider from "@/components/theme-provider"
 import HeaderMain from "@/components/header/header-main"
@@ -29,6 +30,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
             <Component {...pageProps} />
           </main>
         </div>
+        <Toaster />
       </SessionProvider>
     </ThemeProvider>
   )
