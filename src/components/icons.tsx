@@ -6,7 +6,8 @@ import {
   LogInIcon,
   MenuIcon,
   XOctagonIcon,
-  LogOutIcon
+  LogOutIcon,
+  UserCircleIcon
 } from "lucide-react"
 
 export const Icons = {
@@ -17,7 +18,8 @@ export const Icons = {
   login: LogInIcon,
   menu: MenuIcon,
   close: XOctagonIcon,
-  logout: LogOutIcon
+  logout: LogOutIcon,
+  admin: UserCircleIcon
 }
 
 export default Icons

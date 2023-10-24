@@ -1,3 +1,9 @@
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { useSession } from "next-auth/react"
 import DesktopMenu from "@/components/header/header-desktop"
@@ -9,10 +15,10 @@ import React from "react"
 export default function HeaderMain() {
 
   const [show, setShow] = React.useState<boolean>(false)
-  const { data } = useSession()
+  const { data, status } = useSession()
 
   return (
-    <header className="sticky top-0 left-0 w-full border-b">
+    <header className="sticky top-0 left-0 w-full border-b bg-transparent backdrop-blur-sm">
       <div className="container py-3 flex items-center justify-between">
         <div className="flex items-center gap-10">
           {/* brand */}
@@ -20,7 +26,7 @@ export default function HeaderMain() {
             <h1 className="text-2xl font-semibold">PPS</h1>
           </div>
           {/* desktop menu goes here */}
-          <DesktopMenu />
+          {status == "loading" ? "loading..." : (<DesktopMenu />)}
         </div>
         {/* hamburger icon goes here */}
         <div className="md:hidden flex items-center gap-3">
@@ -30,14 +36,24 @@ export default function HeaderMain() {
         <div className="hidden md:flex items-center gap-3">
           <ThemeChanger />
           {data?.user && (
-            <Avatar>
-              <AvatarFallback>
-                {data.user.name?.split(" ").length! > 1
-                  ? data.user.name?.split(" ")[0]?.[0] + data.user.name?.split(" ")[1]?.[0]!
-                  : data.user.name?.split(" ")[0]?.[0]
-                }
-              </AvatarFallback>
-            </Avatar>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Avatar>
+                    <AvatarFallback>
+                      {data.user.name?.split(" ").length! > 1
+                        ? data.user.name?.split(" ")[0]?.[0] + data.user.name?.split(" ")[1]?.[0]!
+                        : data.user.name?.split(" ")[0]?.[0]
+                      }
+                    </AvatarFallback>
+                  </Avatar>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{data.user.name}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
           )}
         </div>
       </div>

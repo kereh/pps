@@ -10,6 +10,24 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+model Surat {
+    id        String   @id @default(cuid())
+    userId    String
+    suratId   String
+    nik       String
+    nama      String
+    nomorTelp String
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    surat     Tipe     @relation(fields: [suratId], references: [id])
+    tanggal   DateTime @default(now())
+}
+
+model Tipe {
+    id           String  @id @default(cuid())
+    tipe_surat   String
+    daftar_surat Surat[]
+}
+
 // Necessary for Next auth
 model Account {
     id                String  @id @default(cuid())
@@ -45,6 +63,7 @@ model User {
     role     Role      @default(USER)
     accounts Account[]
     sessions Session[]
+    Surat    Surat[]
 }
 
 model VerificationToken {
