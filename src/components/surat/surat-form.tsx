@@ -33,8 +33,9 @@ import { z } from "zod"
 
 export default function SuratForm() {
 
-  const { toast } = useToast()
   const { data: surat, isLoading: suratLoading } = api.surat.tipe.useQuery()
+  const { toast } = useToast()
+  const utils = api.useUtils()
 
   const mutation = api.surat.buat.useMutation({
     onSuccess(data) {
@@ -47,6 +48,8 @@ export default function SuratForm() {
         )
       })
       form.reset()
+      // invalidate queries
+      utils.surat.invalidate()
     },
     onError() {
       toast({
@@ -95,7 +98,7 @@ export default function SuratForm() {
                     <Input placeholder="7173XXXXXXXXXX" {...field} />
                   </FormControl>
                   <FormDescription>
-                    Masukan NIK yang berjumlah 16 karakter
+                    Masukan NIK yang berjumlah 16 karakter dan diharapkan untuk memasukan NIK yang valid, karena akan di cek data peminta berdasarkan NIK
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
