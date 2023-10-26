@@ -1,4 +1,4 @@
-# PP (Permintaan Pembuatan Surat)
+# PPS (Permintaan Pembuatan Surat)
 
 Aplikasi permintaan pembuatan surat online berbasi web yang dibangun dengan:
 
