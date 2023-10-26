@@ -155,15 +155,27 @@ export default function SuratForm() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {suratLoading && (<SelectItem value="loading">Memuat...</SelectItem>)}
-                      {!suratLoading && surat?.map((s, i) => (
+                      {/* {suratLoading && (<SelectItem value="loading">Memuat...</SelectItem>)}
+                      {surat && surat?.map((s, i) => (
                         <SelectItem
                           key={i}
                           value={s.id}
                         >
                           {s.tipe_surat}
                         </SelectItem>
-                      ))}
+                      ))} */}
+                      {suratLoading ? (
+                        <SelectItem value="loading">Memuat...</SelectItem>
+                      ) : (
+                        surat?.map((s, i) => (
+                          <SelectItem
+                            key={i}
+                            value={s.id}
+                          >
+                            {s.tipe_surat}
+                          </SelectItem>
+                        ))
+                      )}
                     </SelectContent>
                   </Select>
                   <FormDescription>

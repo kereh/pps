@@ -23,7 +23,7 @@ interface Props {
 
 export default function MobileMenu({ isShowing, setShowing }: Props) {
 
-  const { status } = useSession()
+  const { data, status } = useSession()
 
   return (
     <Transition
@@ -53,12 +53,22 @@ export default function MobileMenu({ isShowing, setShowing }: Props) {
                 <span>Beranda</span>
               </div>
             </Link>
-            <Link href="/" onClick={() => setShowing(!isShowing)}>
-              <div className="flex flex-items gap-2">
-                <Icons.mail className="w-5 h-5" />
-                <span>Buat Surat</span>
-              </div>
-            </Link>
+            {data?.user.role == "USER" && (
+              <Link href="/surat">
+                <div className="flex flex-items gap-2">
+                  <Icons.mail className="w-5 h-5" />
+                  <span>Buat Surat</span>
+                </div>
+              </Link>
+            )}
+            {data?.user.role == "ADMIN" && (
+              <Link href="/admin">
+                <div className="flex flex-items gap-2">
+                  <Icons.admin className="w-5 h-5" />
+                  <span>Admin</span>
+                </div>
+              </Link>
+            )}
             {status == "unauthenticated" ? (
               <Link href="/masuk" onClick={() => setShowing(!isShowing)}>
                 <div className="flex flex-items gap-2">
