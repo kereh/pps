@@ -10,6 +10,6 @@ Aplikasi permintaan pembuatan surat online berbasi web yang dibangun dengan:
 
 ## Nama-nama kelompok
 
-- Dian Ronaldo Kereh (22011008)
-- Syalomitha B.G.A Rambing
-- Kevina Soleran
+- Dian Ronaldo Kereh (22011008) (Semester 3)
+- Syalomitha B.G.A Rambing (22011004) (Semester 3)
+- Kevina Soleran (21011004) (Semester 5)
