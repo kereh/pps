@@ -26,7 +26,7 @@ export const authOptions: NextAuthOptions = {
         username: {},
         password: {}
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         const user = await db.user.findFirst({
           where: {
             username: credentials?.username,
