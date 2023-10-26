@@ -34,7 +34,7 @@ export default function MasukRegister() {
       })
       form.reset()
     },
-    onError(error, variables, context) {
+    onError(error) {
       toast({
         title: "Terjadi Kesalahan",
         description: JSON.stringify(error.data?.code)

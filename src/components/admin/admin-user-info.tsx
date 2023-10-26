@@ -4,8 +4,7 @@ import {
   CardHeader,
   CardTitle,
   CardContent,
-  CardDescription,
-  CardFooter
+  CardDescription
 } from "@/components/ui/card"
 
 
@@ -16,13 +15,11 @@ export default function AdminUserInfo() {
   return (
     <Card className="w-full md:max-w-sm">
       <CardHeader>
-        <CardTitle>Login as {user?.user.name}</CardTitle>
+        <CardTitle>User Info</CardTitle>
         <CardDescription>USER ID{" "}
           <span className="text-primary dark:text-green-700">{user?.user.id}</span>
         </CardDescription>
       </CardHeader>
-      <CardContent>
-      </CardContent>
     </Card>
   )
 }
