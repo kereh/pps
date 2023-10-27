@@ -3,19 +3,15 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-  CardContent
-} from "@/components/ui/card"
+  CardContent,
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
   TableHead,
-  TableHeader
-} from "@/components/ui/table"
+  TableHeader,
+} from "@/components/ui/table";
 
 export default function AdminTable() {
-  return (
-    <div className="w-full">
-
-    </div>
-  )
+  return <div className="w-full"></div>;
 }

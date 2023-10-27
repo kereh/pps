@@ -1,14 +1,14 @@
-import { SessionProvider } from "next-auth/react"
-import { type Session } from "next-auth"
-import { type AppType } from "next/app"
-import { api } from "@/utils/api"
-import { Toaster } from "@/components/ui/toaster"
+import { SessionProvider } from "next-auth/react";
+import { type Session } from "next-auth";
+import { type AppType } from "next/app";
+import { api } from "@/utils/api";
+import { Toaster } from "@/components/ui/toaster";
 // components
-import ThemeProvider from "@/components/theme-provider"
-import HeaderMain from "@/components/header/header-main"
-import Head from "next/head"
+import ThemeProvider from "@/components/theme-provider";
+import HeaderMain from "@/components/header/header-main";
+import Head from "next/head";
 // tailwindcss
-import "@/styles/globals.css"
+import "@/styles/globals.css";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -24,7 +24,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <Head>
           <title>Permintaan Pembuatan Surat</title>
         </Head>
-        <div className="flex flex-col h-screen">
+        <div className="flex h-screen flex-col">
           <HeaderMain />
           <main className="flex-1">
             <Component {...pageProps} />
@@ -33,7 +33,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <Toaster />
       </SessionProvider>
     </ThemeProvider>
-  )
-}
+  );
+};
 
-export default api.withTRPC(MyApp)
+export default api.withTRPC(MyApp);

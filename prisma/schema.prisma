@@ -17,6 +17,7 @@ model Surat {
     nik       String
     nama      String
     nomorTelp String
+    status    Boolean  @default(false)
     user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     surat     Tipe     @relation(fields: [suratId], references: [id])
     tanggal   DateTime @default(now())
@@ -35,12 +36,12 @@ model Account {
     type              String
     provider          String
     providerAccountId String
-    refresh_token     String? // @db.Text
-    access_token      String? // @db.Text
+    refresh_token     String?
+    access_token      String?
     expires_at        Int?
     token_type        String?
     scope             String?
-    id_token          String? // @db.Text
+    id_token          String?
     session_state     String?
     user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 

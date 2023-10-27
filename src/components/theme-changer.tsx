@@ -1,9 +1,9 @@
-import { Button } from "@/components/ui/button"
-import { useTheme } from "next-themes"
-import Icons from "@/components/icons"
+import { Button } from "@/components/ui/button";
+import { useTheme } from "next-themes";
+import Icons from "@/components/icons";
 
 export default function ThemeChanger() {
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme } = useTheme();
   return (
     <Button
       size="sm"
@@ -13,5 +13,5 @@ export default function ThemeChanger() {
       <Icons.lightMode className="dark:hidden" />
       <Icons.darkMode className="hidden dark:block" />
     </Button>
-  )
+  );
 }

@@ -13,9 +13,7 @@ export default function AdminMain() {
         </div>
       )}
       <div className="grid grid-cols-1 place-content-center py-5 gap-6">
-        <AdminUserInfo />
-        <div className="w-full">
-        </div>
+
       </div>
     </div>
   )

@@ -5,7 +5,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -13,29 +13,28 @@ import {
   FormItem,
   FormLabel,
   FormDescription,
-  FormMessage
-} from "@/components/ui/form"
+  FormMessage,
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { suratSchema } from "@/schemas/surat"
-import { useToast } from "@/components/ui/use-toast"
-import { useForm } from "react-hook-form"
-import { api } from "@/utils/api"
-import { z } from "zod"
+} from "@/components/ui/select";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { suratSchema } from "@/schemas/surat";
+import { useToast } from "@/components/ui/use-toast";
+import { useForm } from "react-hook-form";
+import { api } from "@/utils/api";
+import { z } from "zod";
 
 export default function SuratForm() {
-
-  const { data: surat, isLoading: suratLoading } = api.surat.tipe.useQuery()
-  const { toast } = useToast()
-  const utils = api.useUtils()
+  const { data: surat, isLoading: suratLoading } = api.surat.tipe.useQuery();
+  const { toast } = useToast();
+  const utils = api.useUtils();
 
   const mutation = api.surat.buat.useMutation({
     onSuccess(data) {
@@ -45,20 +44,21 @@ export default function SuratForm() {
           <pre>
             <code>{JSON.stringify(data, null, 2)}</code>
           </pre>
-        )
-      })
-      form.reset()
+        ),
+      });
+      // reset the form when success
+      form.reset();
       // invalidate queries
-      utils.surat.invalidate()
+      utils.surat.suratByUser.invalidate();
     },
     onError() {
       toast({
         title: "Permintaan gagal dikirim",
         description: "Periksa kembali data yang anda masukan di form",
-        variant: "destructive"
-      })
+        variant: "destructive",
+      });
     },
-  })
+  });
 
   const form = useForm<z.infer<typeof suratSchema>>({
     resolver: zodResolver(suratSchema),
@@ -67,8 +67,8 @@ export default function SuratForm() {
       nama: "",
       suratId: "",
       telpon: 0,
-    }
-  })
+    },
+  });
 
   function submitHandler(v: z.infer<typeof suratSchema>) {
     mutation.mutate({
@@ -76,18 +76,21 @@ export default function SuratForm() {
       nama: v.nama,
       telpon: v.telpon,
       suratId: v.suratId,
-    })
+    });
   }
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>Buat Permintaan</CardTitle>
-        <CardDescription>Silahkan buat permintaan pembuatan surat dengan mengisi form dibawah ini</CardDescription>
+        <CardDescription>
+          Silahkan buat permintaan pembuatan surat dengan mengisi form dibawah
+          ini
+        </CardDescription>
       </CardHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(submitHandler)}>
-          <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <CardContent className="grid grid-cols-1 gap-8 md:grid-cols-2">
             <FormField
               control={form.control}
               name="nik"
@@ -98,7 +101,9 @@ export default function SuratForm() {
                     <Input placeholder="7173XXXXXXXXXX" {...field} />
                   </FormControl>
                   <FormDescription>
-                    Masukan NIK yang berjumlah 16 karakter dan diharapkan untuk memasukan NIK yang valid, karena akan di cek data peminta berdasarkan NIK
+                    Masukan NIK yang berjumlah 16 karakter dan diharapkan untuk
+                    memasukan NIK yang valid, karena akan di cek data peminta
+                    berdasarkan NIK
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -148,30 +153,21 @@ export default function SuratForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Surat</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Pilih surat" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {/* {suratLoading && (<SelectItem value="loading">Memuat...</SelectItem>)}
-                      {surat && surat?.map((s, i) => (
-                        <SelectItem
-                          key={i}
-                          value={s.id}
-                        >
-                          {s.tipe_surat}
-                        </SelectItem>
-                      ))} */}
                       {suratLoading ? (
                         <SelectItem value="loading">Memuat...</SelectItem>
                       ) : (
                         surat?.map((s, i) => (
-                          <SelectItem
-                            key={i}
-                            value={s.id}
-                          >
+                          <SelectItem key={i} value={s.id}>
                             {s.tipe_surat}
                           </SelectItem>
                         ))
@@ -192,5 +188,5 @@ export default function SuratForm() {
         </form>
       </Form>
     </Card>
-  )
+  );
 }

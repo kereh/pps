@@ -1,5 +1,5 @@
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc"
-import { suratSchema } from "@/schemas/surat"
+import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { suratSchema } from "@/schemas/surat";
 
 export const suratRouter = createTRPCRouter({
   buat: protectedProcedure
@@ -12,23 +12,21 @@ export const suratRouter = createTRPCRouter({
           nomorTelp: input.telpon.toString(),
           suratId: input.suratId,
           userId: ctx.session.user.id,
-        }
-      })
-    }),
-  suratByUser: protectedProcedure
-    .query(async ({ ctx }) => {
-      return ctx.db.tipe.findMany({
-        include: {
-          daftar_surat: {
-            where: {
-              userId: ctx.session.user.id
-            }
-          }
         },
-      })
+      });
     }),
-  tipe: protectedProcedure
-    .query(async ({ ctx }) => {
-      return ctx.db.tipe.findMany()
-    }),
-})
+  suratByUser: protectedProcedure.query(async ({ ctx }) => {
+    return ctx.db.tipe.findMany({
+      include: {
+        daftar_surat: {
+          where: {
+            userId: ctx.session.user.id,
+          },
+        },
+      },
+    });
+  }),
+  tipe: protectedProcedure.query(async ({ ctx }) => {
+    return ctx.db.tipe.findMany();
+  }),
+});

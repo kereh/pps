@@ -33,6 +33,14 @@ export default function DesktopMenu() {
           </div>
         </Link>
       )}
+      {data?.user.role == "USER" && (
+        <Link href="/surat/daftar">
+          <div className="flex flex-items gap-2">
+            <Icons.list className="w-5 h-5" />
+            <span>Daftar Surat</span>
+          </div>
+        </Link>
+      )}
       {data?.user.role == "ADMIN" && (
         <Link href="/admin">
           <div className="flex flex-items gap-2">

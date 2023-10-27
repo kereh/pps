@@ -1,26 +1,39 @@
-import { Form, FormField, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useToast } from "@/components/ui/use-toast"
-import { registerSchema } from "@/schemas/register"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { useForm } from "react-hook-form"
-import { api } from "@/utils/api"
-import { z } from "zod"
+import {
+  Form,
+  FormField,
+  FormControl,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useToast } from "@/components/ui/use-toast";
+import { registerSchema } from "@/schemas/register";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
+import { api } from "@/utils/api";
+import { z } from "zod";
 
 export default function MasukRegister() {
-
-  const { toast } = useToast()
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
       username: "",
       password: "",
-      name: ""
-    }
-  })
+      name: "",
+    },
+  });
 
   const mutation = api.autentikasi.registrasi.useMutation({
     onSuccess: (data) => {
@@ -30,24 +43,24 @@ export default function MasukRegister() {
           <pre className="p-4">
             <code>{JSON.stringify(data, null, 2)}</code>
           </pre>
-        )
-      })
-      form.reset()
+        ),
+      });
+      form.reset();
     },
     onError(error) {
       toast({
         title: "Terjadi Kesalahan",
-        description: JSON.stringify(error.data?.code)
-      })
+        description: JSON.stringify(error.data?.code),
+      });
     },
-  })
+  });
 
   function onSubmit(val: z.infer<typeof registerSchema>) {
     mutation.mutate({
       name: val.name,
       username: val.username,
-      password: val.password
-    })
+      password: val.password,
+    });
   }
 
   return (
@@ -59,62 +72,59 @@ export default function MasukRegister() {
         </CardDescription>
       </CardHeader>
       <Form {...form}>
-        {mutation.isLoading
-          ? (
-            <CardContent>
-              Mendaftarkan akun...
+        {mutation.isLoading ? (
+          <CardContent>Mendaftarkan akun...</CardContent>
+        ) : (
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <CardContent className="space-y-2">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Nama</FormLabel>
+                    <FormControl>
+                      <Input placeholder="John Doe" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Username</FormLabel>
+                    <FormControl>
+                      <Input placeholder="johndoe123" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input placeholder="*****" type="password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </CardContent>
-          )
-          : (
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-              <CardContent className="space-y-2">
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Nama</FormLabel>
-                      <FormControl>
-                        <Input placeholder="John Doe" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="username"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Username</FormLabel>
-                      <FormControl>
-                        <Input placeholder="johndoe123" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Password</FormLabel>
-                      <FormControl>
-                        <Input placeholder="*****" type="password" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </CardContent>
-              <CardFooter>
-                <Button type="submit" disabled={mutation.isLoading}>Save password</Button>
-              </CardFooter>
-            </form>
-          )
-        }
+            <CardFooter>
+              <Button type="submit" disabled={mutation.isLoading}>
+                Save password
+              </Button>
+            </CardFooter>
+          </form>
+        )}
       </Form>
     </Card>
-  )
+  );
 }

@@ -1,5 +1,5 @@
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc"
-import { registerSchema } from "@/schemas/register"
+import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { registerSchema } from "@/schemas/register";
 
 export const autentikasiRouter = createTRPCRouter({
   registrasi: publicProcedure
@@ -9,8 +9,8 @@ export const autentikasiRouter = createTRPCRouter({
         data: {
           name: input.name,
           username: input.username,
-          password: input.password
-        }
-      })
-    })
-})
+          password: input.password,
+        },
+      });
+    }),
+});
