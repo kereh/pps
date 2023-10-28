@@ -50,6 +50,7 @@ export default function SuratForm() {
       form.reset();
       // invalidate queries
       utils.surat.suratByUser.invalidate();
+      utils.surat.suratUserByTipe.invalidate();
     },
     onError() {
       toast({
@@ -98,7 +99,11 @@ export default function SuratForm() {
                 <FormItem>
                   <FormLabel>Nomor Induk Kependudukan</FormLabel>
                   <FormControl>
-                    <Input placeholder="7173XXXXXXXXXX" {...field} />
+                    <Input
+                      disabled={field.value.length == 16 ? true : false}
+                      placeholder="7173XXXXXXXXXX"
+                      {...field}
+                    />
                   </FormControl>
                   <FormDescription>
                     Masukan NIK yang berjumlah 16 karakter dan diharapkan untuk

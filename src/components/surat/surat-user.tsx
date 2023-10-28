@@ -14,7 +14,8 @@ import {
 import { api } from "@/utils/api";
 
 export default function SuratUser() {
-  const { data: surat } = api.surat.suratByUser.useQuery();
+  const { data: surat, isLoading: suratLoading } =
+    api.surat.suratUserByTipe.useQuery();
 
   return (
     <Card>
@@ -23,14 +24,18 @@ export default function SuratUser() {
         <CardDescription>Daftar permintaan yang anda buat</CardDescription>
       </CardHeader>
       <CardContent>
-        <Accordion type="single" collapsible>
-          {surat?.map((s, i) => (
-            <AccordionItem key={i} value={`item-${i + 1}`}>
-              <AccordionTrigger>{s.tipe_surat}</AccordionTrigger>
-              <AccordionContent>{s.daftar_surat.length}</AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
+        {suratLoading ? (
+          <p>Memuat...</p>
+        ) : (
+          <Accordion type="single" collapsible>
+            {surat?.map((s, i) => (
+              <AccordionItem key={i} value={`item-${i + 1}`}>
+                <AccordionTrigger>{s.tipe_surat}</AccordionTrigger>
+                <AccordionContent>{s.daftar_surat.length}</AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        )}
       </CardContent>
     </Card>
   );
