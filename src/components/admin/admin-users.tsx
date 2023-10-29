@@ -26,42 +26,22 @@ import {
   DropdownMenuTrigger,
   DropdownMenuLabel,
   DropdownMenuItem,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { api, type RouterOutputs } from "@/utils/api";
 import { useToast } from "@/components/ui/use-toast";
+import { RouterOutputs, api } from "@/utils/api";
 import { Button } from "@/components/ui/button";
 import { ChevronDownIcon } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import moment from "moment";
 
-interface DataTableProps<TData> {
+interface TableProps<TData> {
   data: TData[];
 }
 
-const columns: ColumnDef<any, RouterOutputs["surat"]["suratByUser"]>[] = [
+const columns: ColumnDef<any, RouterOutputs["users"]["semuaUser"]>[] = [
   {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => (
-      <div
-        className={`${
-          row.getValue("status") == false
-            ? "text-destructive"
-            : "text-green-500"
-        }`}
-      >
-        {row.getValue("status") == false ? (
-          <Badge variant="destructive">Belum Disetujui</Badge>
-        ) : (
-          <Badge variant="default">Sudah Disetujui</Badge>
-        )}
-      </div>
-    ),
-  },
-  {
-    accessorKey: "nama",
+    accessorKey: "name",
     header: ({ column }) => {
       return (
         <Button
@@ -75,46 +55,29 @@ const columns: ColumnDef<any, RouterOutputs["surat"]["suratByUser"]>[] = [
     },
   },
   {
-    accessorKey: "nomorTelp",
-    header: "No. HP",
+    accessorKey: "username",
+    header: "Username",
   },
   {
-    accessorKey: "surat.tipe_surat",
-    header: "Tipe Surat",
-  },
-  {
-    accessorKey: "tanggal",
-    header: "Dibuat Pada",
-    cell: ({ row }) => (
-      <div>{moment(row.getValue("tanggal")).format("dddd, DD MMMM YYYY")}</div>
-    ),
+    accessorKey: "role",
+    header: "Peran",
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
+      const { id } = row.original!;
       const { toast } = useToast();
       const utils = api.useUtils();
-      const mutation = api.surat.hapusSuratById.useMutation({
-        onSuccess(data) {
-          utils.surat.suratByUser.invalidate();
-          return toast({
-            title: "Data berhasil dihapus",
-            description: (
-              <pre>
-                <code>{JSON.stringify(data, null, 2)}</code>
-              </pre>
-            ),
+      const mutation = api.users.hapusUser.useMutation({
+        onSuccess: () => {
+          toast({
+            title: "Berhasil",
+            description: "Data anda berhasil dihapus",
           });
+          utils.users.invalidate();
         },
       });
-      // @ts-ignore
-      const { id } = row.original;
-      // delete handler
-      function deleteHandler(id: string) {
-        mutation.mutate({ id: id });
-      }
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -125,11 +88,15 @@ const columns: ColumnDef<any, RouterOutputs["surat"]["suratByUser"]>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(id)}>
-              Salin ID Surat
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => deleteHandler(id)}>
-              Hapus Surat
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>Edit User</DropdownMenuItem>
+            <DropdownMenuItem
+              className="text-destructive"
+              onClick={() => {
+                mutation.mutate({ id: id });
+              }}
+            >
+              Hapus User
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -138,7 +105,7 @@ const columns: ColumnDef<any, RouterOutputs["surat"]["suratByUser"]>[] = [
   },
 ];
 
-export default function DataTable<TData>({ data }: DataTableProps<TData>) {
+export default function AdminUser<TData>({ data }: TableProps<TData>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -164,15 +131,14 @@ export default function DataTable<TData>({ data }: DataTableProps<TData>) {
       rowSelection,
     },
   });
-
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
           placeholder="Cari berdasarkan nama ..."
-          value={(table.getColumn("nama")?.getFilterValue() as string) ?? ""}
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("nama")?.setFilterValue(event.target.value)
+            table.getColumn("name")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

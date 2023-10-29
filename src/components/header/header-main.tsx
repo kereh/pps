@@ -17,7 +17,7 @@ export default function HeaderMain() {
   const { data, status } = useSession();
 
   return (
-    <header className="sticky left-0 top-0 w-full border-b bg-transparent backdrop-blur-sm">
+    <header className="sticky left-0 top-0 z-[100] w-full border-b bg-transparent backdrop-blur-sm">
       <div className="container flex items-center justify-between py-3">
         <div className="flex items-center gap-10">
           {/* brand */}

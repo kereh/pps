@@ -39,11 +39,7 @@ export default function MasukRegister() {
     onSuccess: (data) => {
       toast({
         title: "Registrasi berhasil!",
-        description: (
-          <pre className="p-4">
-            <code>{JSON.stringify(data, null, 2)}</code>
-          </pre>
-        ),
+        description: "Akun anda berhasil didaftarkan",
       });
       form.reset();
     },

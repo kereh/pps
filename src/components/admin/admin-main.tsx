@@ -1,20 +1,30 @@
-import { useSession } from "next-auth/react"
-import AdminUserInfo from "@/components/admin/admin-user-info"
+import { useSession } from "next-auth/react";
+import { api } from "@/utils/api";
+import AdminUser from "@/components/admin/admin-users";
 
 export default function AdminMain() {
+  const { status } = useSession();
+  const { data: users, isLoading: loading } = api.users.semuaUser.useQuery();
 
-  const { status } = useSession()
+  if (status == "loading")
+    return (
+      <div className="grid h-screen w-full place-content-center">
+        <h1>Memuat...</h1>
+      </div>
+    );
 
   return (
     <div className="w-full">
-      {status == "loading" && (
-        <div className="w-full h-screen grid place-content-center">
-          <h1>Memuat Data...</h1>
-        </div>
-      )}
-      <div className="grid grid-cols-1 place-content-center py-5 gap-6">
-
+      <div className="grid grid-cols-1 place-content-center gap-6 py-5 md:grid-cols-2">
+        {/* daftar user */}
+        {loading ? (
+          <div className="grid h-screen place-content-center">Memuat...</div>
+        ) : (
+          // @ts-ignore
+          <AdminUser data={users} />
+        )}
+        {/* surat masuk */}
       </div>
     </div>
-  )
+  );
 }

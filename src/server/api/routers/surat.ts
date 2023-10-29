@@ -16,6 +16,9 @@ export const suratRouter = createTRPCRouter({
         },
       });
     }),
+  semuaSurat: protectedProcedure.query(async ({ ctx: { db } }) => {
+    return db.surat.findMany()
+  }),
   suratByUser: protectedProcedure.query(async ({ ctx: { db, session } }) => {
     return db.surat.findMany({
       where: {
