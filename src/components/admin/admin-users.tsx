@@ -89,9 +89,7 @@ const columns: ColumnDef<any, RouterOutputs["users"]["semuaUser"]>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Edit User</DropdownMenuItem>
             <DropdownMenuItem
-              className="text-destructive"
               onClick={() => {
                 mutation.mutate({ id: id });
               }}
@@ -225,8 +223,8 @@ export default function AdminUser<TData>({ data }: TableProps<TData>) {
           {table.getFilteredRowModel().rows.length
             ? `Saat ini terdapat ${
                 table.getFilteredRowModel().rows.length
-              } surat.`
-            : "Anda tidak mempunyai surat"}
+              } User.`
+            : "Belum ada user."}
         </div>
         <div className="space-x-2">
           <Button
