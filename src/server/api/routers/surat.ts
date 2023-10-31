@@ -50,8 +50,8 @@ export const suratRouter = createTRPCRouter({
       });
     },
   ),
-  tipe: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.db.tipe.findMany();
+  tipe: protectedProcedure.query(async ({ ctx: { db } }) => {
+    return db.tipe.findMany();
   }),
   hapusSuratById: protectedProcedure
     .input(

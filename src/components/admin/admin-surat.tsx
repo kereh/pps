@@ -138,7 +138,6 @@ const columns: ColumnDef<any, RouterOutputs["surat"]["semuaSurat"]>[] = [
             >
               {!status ? "Setujui" : "Tolak"} Surat
             </DropdownMenuItem>
-            <DropdownMenuItem>Edit Surat</DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
                 hapus.mutate({ id: id });

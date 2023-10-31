@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const suratSchema = z.object({
+  id: z.string().nullable(),
   nik: z
     .string()
     .min(1, { message: "NIK harus diisi" })
