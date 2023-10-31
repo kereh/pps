@@ -34,14 +34,38 @@ import { RouterOutputs, api } from "@/utils/api";
 import { Button } from "@/components/ui/button";
 import { ChevronDownIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 
 interface TableProps<TData> {
   data: TData[];
 }
 
-const columns: ColumnDef<any, RouterOutputs["users"]["semuaUser"]>[] = [
+const columns: ColumnDef<any, RouterOutputs["surat"]["semuaSurat"]>[] = [
   {
-    accessorKey: "name",
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => (
+      <div
+        className={`${
+          row.getValue("status") == false
+            ? "text-destructive"
+            : "text-green-500"
+        }`}
+      >
+        {row.getValue("status") == false ? (
+          <Badge variant="destructive">Belum Disetujui</Badge>
+        ) : (
+          <Badge variant="default">Sudah Disetujui</Badge>
+        )}
+      </div>
+    ),
+  },
+  {
+    accessorKey: "surat.tipe_surat",
+    header: "Tipe Surat",
+  },
+  {
+    accessorKey: "nama",
     header: ({ column }) => {
       return (
         <Button
@@ -55,29 +79,47 @@ const columns: ColumnDef<any, RouterOutputs["users"]["semuaUser"]>[] = [
     },
   },
   {
-    accessorKey: "username",
-    header: "Username",
-  },
-  {
-    accessorKey: "role",
-    header: "Peran",
+    accessorKey: "nomorTelp",
+    header: "No. Hp",
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const { id } = row.original!;
+      const { id, status } = row.original;
       const { toast } = useToast();
       const utils = api.useUtils();
-      const mutation = api.users.hapusUser.useMutation({
-        onSuccess: () => {
+
+      // setujui surat mutation
+      const setujui = api.surat.setujuiSurat.useMutation({
+        onSuccess: (data) => {
           toast({
-            title: "Berhasil",
-            description: "Data anda berhasil dihapus",
+            title: "Data Berhasil Diubah",
+            description: (
+              <pre>
+                <code>{JSON.stringify(data, null, 2)}</code>
+              </pre>
+            ),
           });
-          utils.users.invalidate();
+          utils.surat.semuaSurat.invalidate();
         },
       });
+
+      // hapus surat mutation
+      const hapus = api.surat.hapusSuratById.useMutation({
+        onSuccess: (data) => {
+          toast({
+            title: "Data Berhasil Dihapus",
+            description: (
+              <pre>
+                <code>{JSON.stringify(data, null, 2)}</code>
+              </pre>
+            ),
+          });
+          utils.surat.semuaSurat.invalidate();
+        },
+      });
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -89,14 +131,20 @@ const columns: ColumnDef<any, RouterOutputs["users"]["semuaUser"]>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Edit User</DropdownMenuItem>
             <DropdownMenuItem
-              className="text-destructive"
               onClick={() => {
-                mutation.mutate({ id: id });
+                setujui.mutate({ id: id, status: !status });
               }}
             >
-              Hapus User
+              {!status ? "Setujui" : "Tolak"} Surat
+            </DropdownMenuItem>
+            <DropdownMenuItem>Edit Surat</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                hapus.mutate({ id: id });
+              }}
+            >
+              Hapus Surat
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -105,7 +153,7 @@ const columns: ColumnDef<any, RouterOutputs["users"]["semuaUser"]>[] = [
   },
 ];
 
-export default function AdminUser<TData>({ data }: TableProps<TData>) {
+export default function AdminSurat<TData>({ data }: TableProps<TData>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -133,13 +181,13 @@ export default function AdminUser<TData>({ data }: TableProps<TData>) {
   });
   return (
     <div className="w-full">
-      <h1 className="text-2xl font-semibold">Daftar Pengguna</h1>
+      <h1 className="text-2xl font-semibold">Daftar Surat</h1>
       <div className="flex items-center py-4">
         <Input
           placeholder="Cari berdasarkan nama ..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          value={(table.getColumn("nama")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
+            table.getColumn("nama")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

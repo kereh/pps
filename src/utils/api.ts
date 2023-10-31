@@ -31,6 +31,7 @@ export const api = createTRPCNext<AppRouter>({
         defaultOptions: {
           queries: {
             refetchOnWindowFocus: false,
+            refetchInterval: 10000,
           },
         },
       },

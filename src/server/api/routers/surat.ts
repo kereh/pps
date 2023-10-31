@@ -1,4 +1,8 @@
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import {
+  adminProcedure,
+  createTRPCRouter,
+  protectedProcedure,
+} from "@/server/api/trpc";
 import { suratSchema } from "@/schemas/surat";
 import { z } from "zod";
 
@@ -16,8 +20,12 @@ export const suratRouter = createTRPCRouter({
         },
       });
     }),
-  semuaSurat: protectedProcedure.query(async ({ ctx: { db } }) => {
-    return db.surat.findMany()
+  semuaSurat: adminProcedure.query(async ({ ctx: { db } }) => {
+    return db.surat.findMany({
+      include: {
+        surat: true,
+      },
+    });
   }),
   suratByUser: protectedProcedure.query(async ({ ctx: { db, session } }) => {
     return db.surat.findMany({
@@ -55,6 +63,23 @@ export const suratRouter = createTRPCRouter({
       return db.surat.delete({
         where: {
           id: input.id,
+        },
+      });
+    }),
+  setujuiSurat: adminProcedure
+    .input(
+      z.object({
+        status: z.boolean(),
+        id: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx: { db }, input: { status, id } }) => {
+      return db.surat.update({
+        where: {
+          id: id,
+        },
+        data: {
+          status: status,
         },
       });
     }),

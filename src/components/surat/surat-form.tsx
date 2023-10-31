@@ -23,16 +23,18 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { suratSchema } from "@/schemas/surat";
-import { useToast } from "@/components/ui/use-toast";
+import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { api } from "@/utils/api";
 import { z } from "zod";
 
 export default function SuratForm() {
   const { data: surat, isLoading: suratLoading } = api.surat.tipe.useQuery();
+  const { data: user } = useSession();
   const { toast } = useToast();
   const utils = api.useUtils();
 
@@ -65,7 +67,7 @@ export default function SuratForm() {
     resolver: zodResolver(suratSchema),
     defaultValues: {
       nik: "",
-      nama: "",
+      nama: user?.user.name!,
       suratId: "",
       telpon: 0,
     },
@@ -74,7 +76,7 @@ export default function SuratForm() {
   function submitHandler(v: z.infer<typeof suratSchema>) {
     mutation.mutate({
       nik: v.nik,
-      nama: v.nama,
+      nama: user?.user.name!,
       telpon: v.telpon,
       suratId: v.suratId,
     });
@@ -119,12 +121,17 @@ export default function SuratForm() {
               name="nama"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nama Lengkap (KTP)</FormLabel>
+                  <FormLabel>Nama Lengkap</FormLabel>
                   <FormControl>
-                    <Input placeholder="Dian Ronaldo Kereh" {...field} />
+                    <Input
+                      placeholder={`${user?.user.name}`}
+                      readOnly
+                      disabled
+                      {...field}
+                    />
                   </FormControl>
                   <FormDescription>
-                    Masukan nama lengkap sesuai dengan KTP
+                    Nama mengikuti nama yang sudah didaftarkan pada akun
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
