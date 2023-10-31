@@ -35,6 +35,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronDownIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { useRouter } from "next/router";
 
 interface TableProps<TData> {
   data: TData[];
@@ -86,8 +87,9 @@ const columns: ColumnDef<any, RouterOutputs["surat"]["semuaSurat"]>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const { id, status } = row.original;
+      const { id, status, nomorTelp } = row.original;
       const { toast } = useToast();
+      const { push } = useRouter();
       const utils = api.useUtils();
 
       // setujui surat mutation
@@ -144,6 +146,13 @@ const columns: ColumnDef<any, RouterOutputs["surat"]["semuaSurat"]>[] = [
               }}
             >
               Hapus Surat
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                push(`https://wa.me/${nomorTelp}`);
+              }}
+            >
+              Hubungi Pengguna
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -48,9 +48,7 @@ export default function SuratForm() {
           </pre>
         ),
       });
-      // reset the form when success
       form.reset();
-      // invalidate queries
       utils.surat.suratByUser.invalidate();
       utils.surat.suratUserByTipe.invalidate();
     },
@@ -66,8 +64,8 @@ export default function SuratForm() {
   const form = useForm<z.infer<typeof suratSchema>>({
     resolver: zodResolver(suratSchema),
     defaultValues: {
+      nama: "",
       nik: "",
-      nama: user?.user.name!,
       suratId: "",
       telpon: 0,
     },
@@ -75,8 +73,8 @@ export default function SuratForm() {
 
   function submitHandler(v: z.infer<typeof suratSchema>) {
     mutation.mutate({
-      nik: v.nik,
       nama: user?.user.name!,
+      nik: user?.user.nik!,
       telpon: v.telpon,
       suratId: v.suratId,
     });
@@ -102,15 +100,14 @@ export default function SuratForm() {
                   <FormLabel>Nomor Induk Kependudukan</FormLabel>
                   <FormControl>
                     <Input
-                      disabled={field.value.length == 16 ? true : false}
-                      placeholder="7173XXXXXXXXXX"
-                      {...field}
+                      placeholder={`${user?.user.nik}`}
+                      value={user?.user.nik!}
+                      readOnly
                     />
                   </FormControl>
                   <FormDescription>
                     Masukan NIK yang berjumlah 16 karakter dan diharapkan untuk
-                    memasukan NIK yang valid, karena akan di cek data peminta
-                    berdasarkan NIK
+                    memasukan NIK yang valid.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -125,13 +122,12 @@ export default function SuratForm() {
                   <FormControl>
                     <Input
                       placeholder={`${user?.user.name}`}
+                      value={user?.user.name!}
                       readOnly
-                      disabled
-                      {...field}
                     />
                   </FormControl>
                   <FormDescription>
-                    Nama mengikuti nama yang sudah didaftarkan pada akun
+                    Nama lengkap mengikuti nama yang sudah didaftarkan pada akun
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

@@ -5,6 +5,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from "@/components/ui/form";
 import {
   Card,
@@ -32,6 +33,7 @@ export default function MasukRegister() {
       username: "",
       password: "",
       name: "",
+      nik: "",
     },
   });
 
@@ -53,6 +55,7 @@ export default function MasukRegister() {
 
   function onSubmit(val: z.infer<typeof registerSchema>) {
     mutation.mutate({
+      nik: val.nik,
       name: val.name,
       username: val.username,
       password: val.password,
@@ -60,7 +63,7 @@ export default function MasukRegister() {
   }
 
   return (
-    <Card>
+    <Card className="w-full">
       <CardHeader>
         <CardTitle>Buat akun</CardTitle>
         <CardDescription>
@@ -72,7 +75,23 @@ export default function MasukRegister() {
           <CardContent>Mendaftarkan akun...</CardContent>
         ) : (
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <CardContent className="space-y-2">
+            <CardContent className="grid grid-cols-1 gap-4">
+              <FormField
+                control={form.control}
+                name="nik"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Nomor Induk Kependudukan (NIK)</FormLabel>
+                    <FormControl>
+                      <Input placeholder="7173XXXXXXXXXX" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      Harap memasukan NIK dengan benar yang berjumlah 16 digit.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="name"
@@ -82,6 +101,9 @@ export default function MasukRegister() {
                     <FormControl>
                       <Input placeholder="John Doe" {...field} />
                     </FormControl>
+                    <FormDescription>
+                      Masukan nama lengkap sesuai KTP
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

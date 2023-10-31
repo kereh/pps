@@ -7,6 +7,7 @@ export const autentikasiRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       return ctx.db.user.create({
         data: {
+          nik: input.nik,
           name: input.name,
           username: input.username,
           password: input.password,

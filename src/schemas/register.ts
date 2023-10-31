@@ -1,6 +1,10 @@
 import { z } from "zod";
 
 export const registerSchema = z.object({
+  nik: z
+    .string()
+    .min(1, { message: "nik tidak boleh kosong" })
+    .max(16, { message: "nik tidak boleh lebih dari 16 digit" }),
   name: z
     .string()
     .min(1, { message: "nama tidak boleh kosong" })

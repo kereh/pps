@@ -41,6 +41,20 @@ interface TableProps<TData> {
 
 const columns: ColumnDef<any, RouterOutputs["users"]["semuaUser"]>[] = [
   {
+    accessorKey: "nik",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Nomor Induk Kependudukan
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+  },
+  {
     accessorKey: "name",
     header: ({ column }) => {
       return (

@@ -18,8 +18,8 @@ model Surat {
     nama      String
     nomorTelp String
     status    Boolean  @default(false)
-    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-    surat     Tipe     @relation(fields: [suratId], references: [id])
+    user      User     @relation(fields: [userId], references: [id])
+    surat     Tipe     @relation(fields: [suratId], references: [id], onDelete: Cascade)
     tanggal   DateTime @default(now())
 }
 
@@ -58,6 +58,7 @@ model Session {
 
 model User {
     id       String    @id @default(cuid())
+    nik      String    @unique
     name     String?   @unique
     username String    @unique
     password String

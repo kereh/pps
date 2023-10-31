@@ -12,8 +12,8 @@ export const suratRouter = createTRPCRouter({
     .mutation(async ({ ctx: { db, session }, input }) => {
       return db.surat.create({
         data: {
-          nik: input.nik,
-          nama: input.nama,
+          nik: session.user.nik,
+          nama: session.user.name!,
           nomorTelp: "+62" + input.telpon.toString(),
           suratId: input.suratId,
           userId: session.user.id,

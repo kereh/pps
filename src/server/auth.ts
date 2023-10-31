@@ -44,6 +44,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.role = user.role;
+        token.nik = user.nik;
       }
       return token;
     },
@@ -54,6 +55,7 @@ export const authOptions: NextAuthOptions = {
           ...session.user,
           id: token.id as string,
           role: token.role,
+          nik: token.nik,
         },
       };
       return sess;
